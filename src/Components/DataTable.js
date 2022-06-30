@@ -14,6 +14,61 @@ const DataTable = () => {
         handleSubmit,
         formState: { errors },
     } = useForm();
+
+    const [bills, setBills] = useState([]);
+    const [pageCount, setPageCount] = useState(0);
+    const [page, setPage] = useState(0);
+    // MODAL
+    const values = [true, "xxl-down"];
+    const [fullscreen, setFullscreen] = useState(true);
+    const [show, setShow] = useState(false);
+
+    // LOAD DATA
+    useEffect(() => {
+        fetch(`http://localhost:5000/bills?page=${page}&size=${10}`)
+            .then((res) => res.json())
+            .then((data) => {
+                setBills(data);
+            });
+    }, [page]);
+    useEffect(() => {
+        fetch("http://localhost:5000/billsCount")
+            .then((res) => res.json())
+            .then((data) => {
+                const count = data.count;
+                const pages = Math.ceil(count / 10);
+                setPageCount(pages);
+            });
+    }, []);
+
+    function handleShow(breakpoint) {
+        setFullscreen(breakpoint);
+        setShow(true);
+    }
+
+    const handleNext = () => {
+        setPage(page + 1);
+    };
+    const handlePre = () => {
+        setPage(page - 1);
+    };
+    const handleDelete = (id) => {
+        console.log(id);
+        fetch(`http://localhost:5000/bills/${id}`, {
+            method: "DELETE",
+        })
+            .then((response) => response.json())
+            .then((result) => {
+                if (result) {
+                    toast.success("Successfully deleted");
+                    reset();
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+        reset();
+    };
     const onSubmit = async (data) => {
         console.log(data);
         fetch("http://localhost:5000/bills", {
@@ -36,45 +91,6 @@ const DataTable = () => {
             });
         reset();
     };
-
-    const [bills, setBills] = useState([]);
-    const [pageCount, setPageCount] = useState(0);
-    const [page, setPage] = useState(0);
-
-    // MODAL
-    const values = [true, "xxl-down"];
-    const [fullscreen, setFullscreen] = useState(true);
-    const [show, setShow] = useState(false);
-
-    function handleShow(breakpoint) {
-        setFullscreen(breakpoint);
-        setShow(true);
-    }
-
-    const handleNext = () => {
-        setPage(page + 1);
-    };
-    const handlePre = () => {
-        setPage(page - 1);
-    };
-
-    // LOAD DATA
-    useEffect(() => {
-        fetch(`http://localhost:5000/bills?page=${page}&size=${10}`)
-            .then((res) => res.json())
-            .then((data) => {
-                setBills(data);
-            });
-    }, [page]);
-    useEffect(() => {
-        fetch("http://localhost:5000/billsCount")
-            .then((res) => res.json())
-            .then((data) => {
-                const count = data.count;
-                const pages = Math.ceil(count / 10);
-                setPageCount(pages);
-            });
-    }, []);
 
     return (
         <section>
@@ -273,7 +289,10 @@ const DataTable = () => {
                                     <button className="btn btn-success rounded-0 bg-gradient border-0 w-100">
                                         Edit
                                     </button>
-                                    <button className="btn btn-danger rounded-0 border-0 bg-gradient w-100">
+                                    <button
+                                        onClick={() => handleDelete(bill._id)}
+                                        className="btn btn-danger rounded-0 border-0 bg-gradient w-100"
+                                    >
                                         Delete
                                     </button>
                                 </td>
