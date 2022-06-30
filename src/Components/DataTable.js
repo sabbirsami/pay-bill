@@ -6,6 +6,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useForm } from "react-hook-form";
 import Pagination from "react-bootstrap/Pagination";
+import { useQuery } from "react-query";
 
 const DataTable = () => {
     const {
@@ -16,6 +17,7 @@ const DataTable = () => {
     } = useForm();
 
     const [bills, setBills] = useState([]);
+    const [search, setSearch] = useState([]);
     const [pageCount, setPageCount] = useState(0);
     const [page, setPage] = useState(0);
     // MODAL
@@ -34,15 +36,23 @@ const DataTable = () => {
         handleDelete(id);
     };
 
-    // LOAD DATA
+    // const handleSearch = (text) => {
+    //     const filtered = countries.filter((country) =>
+    //         country.name.common.includes(text)
+    //     );
+    //     setSearch(filtered);
+
+    // LOAD DATA BY PAGE
     useEffect(() => {
         fetch(`http://localhost:5000/bills?page=${page}&size=${10}`)
             .then((res) => res.json())
             .then((data) => {
+                setSearch(data);
                 setBills(data);
             });
     }, [page, bills]);
 
+    // GET TOTAL BILLS NUMBER
     useEffect(() => {
         fetch("http://localhost:5000/billsCount")
             .then((res) => res.json())
@@ -64,6 +74,8 @@ const DataTable = () => {
     const handlePre = () => {
         setPage(page - 1);
     };
+
+    // DELETE BILL
     const handleDelete = (id) => {
         console.log(id);
         fetch(`http://localhost:5000/bills/${id}`, {
@@ -82,6 +94,8 @@ const DataTable = () => {
             });
         reset();
     };
+
+    // ADD NEW BILL
     const onSubmit = async (data) => {
         console.log(data);
         fetch("http://localhost:5000/bills", {
@@ -94,9 +108,13 @@ const DataTable = () => {
             .then((response) => response.json())
             .then((result) => {
                 if (result) {
-                    toast.success("Successfully added");
-                    <Toaster />;
-                    reset();
+                    console.log(result);
+                    if (result.status === "ok") {
+                        toast.success("Successfully added");
+                        <Toaster />;
+                        reset();
+                    } else {
+                    }
                 }
             })
             .catch((error) => {
@@ -132,6 +150,7 @@ const DataTable = () => {
                         </div>
                     </div>
                 </div>
+
                 {/*  DELETE MODAL  */}
                 <>
                     <Modal centered show={showDeleteModal} onHide={handleClose}>
@@ -163,7 +182,6 @@ const DataTable = () => {
                 </>
 
                 {/* ADD NEW BILL MODAL */}
-
                 <Modal
                     show={show}
                     fullscreen={fullscreen}
@@ -344,6 +362,8 @@ const DataTable = () => {
                         ))}
                     </tbody>
                 </Table>
+
+                {/* PAGINATION AREA  */}
                 <div className="mx-auto text-center">
                     <Pagination className="justify-content-center">
                         <Pagination.Prev onClick={handlePre} />

@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 const SignUp = () => {
+    const [usersEmail, setUsersEmail] = useState([]);
+    const [databaseUserEmail, setDatabaseUserEmail] = useState([]);
     const {
         register,
         formState: { errors },
@@ -12,23 +14,44 @@ const SignUp = () => {
         handleSubmit,
     } = useForm();
     let navigate = useNavigate();
+    let loginError;
+    fetch(`http://localhost:5000/registration/${usersEmail}`)
+        .then((res) => res.json())
+        .then((result) => {
+            if (usersEmail === result.email) {
+                setDatabaseUserEmail(result.email);
+                loginError = (
+                    <p>
+                        <small className="text-danger">
+                            Email already used.
+                        </small>
+                    </p>
+                );
+            }
+            console.log(result);
+        });
 
     const onSubmit = (data) => {
         console.log(data);
-        fetch("http://localhost:5000/registration", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        })
-            .then((res) => res.json())
-            .then((result) => {
-                navigate("/");
-                console.log(result);
-            });
+        setUsersEmail(data.email);
+        if (databaseUserEmail !== usersEmail) {
+            fetch("http://localhost:5000/registration", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+                .then((res) => res.json())
+                .then((result) => {
+                    navigate("/");
+                    console.log(result);
+                });
 
-        reset();
+            reset();
+        } else {
+            console.log("Here");
+        }
     };
     return (
         <div>
@@ -99,6 +122,7 @@ const SignUp = () => {
                                                 )}
                                             </p>
                                         </FloatingLabel>
+                                        {loginError}
                                         <FloatingLabel
                                             controlId="floatingPassword"
                                             label="Password"

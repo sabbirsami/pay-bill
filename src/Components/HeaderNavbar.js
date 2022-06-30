@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Navbar } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
+import { useQuery } from "react-query";
 
 const HeaderNavbar = () => {
     const [amount, setAmount] = useState([]);
     console.log(amount.email);
 
-    useEffect(() => {
-        fetch(`http://localhost:5000/bills`)
-            .then((res) => res.json())
-            .then((data) => {
-                setAmount(data);
-            });
-    }, []);
+    const { isLoading, error, data } = useQuery("repoData", () =>
+        fetch("http://localhost:5000/bill-list").then((res) => res.json())
+    );
+    console.log(data);
+    if (isLoading) {
+        return <p>Loading...</p>;
+    }
+
     return (
         <header className="border-bottom">
             <Navbar>
@@ -23,7 +25,7 @@ const HeaderNavbar = () => {
                     <Navbar.Toggle />
                     <Navbar.Collapse className="justify-content-end">
                         <Navbar.Text className="text-dark fs-5 ">
-                            Total Paid: <p className="d-inline">31</p>
+                            Total Paid: <p className="d-inline">{data.total}</p>
                         </Navbar.Text>
                     </Navbar.Collapse>
                 </Container>
