@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useForm } from "react-hook-form";
+import Pagination from "react-bootstrap/Pagination";
 
 const DataTable = () => {
     const {
@@ -18,6 +19,8 @@ const DataTable = () => {
     };
 
     const [bills, setBills] = useState([]);
+    const [pageCount, setPageCount] = useState(0);
+    const [page, setPage] = useState(0);
 
     // MODAL
     const values = [true, "xxl-down"];
@@ -28,14 +31,23 @@ const DataTable = () => {
         setFullscreen(breakpoint);
         setShow(true);
     }
-
+    let size = 10;
     // LOAD DATA
     useEffect(() => {
-        fetch("http://localhost:5000/bills")
+        fetch(`http://localhost:5000/bills?page=${page}&size=${10}`)
             .then((res) => res.json())
             .then((data) => {
                 console.log(data);
                 setBills(data);
+            });
+    }, [page]);
+    useEffect(() => {
+        fetch("http://localhost:5000/billsCount")
+            .then((res) => res.json())
+            .then((data) => {
+                const count = data.count;
+                const pages = Math.ceil(count / 10);
+                setPageCount(pages);
             });
     }, []);
 
@@ -226,7 +238,7 @@ const DataTable = () => {
                     </thead>
                     <tbody className="">
                         {bills.map((bill, index) => (
-                            <tr>
+                            <tr key={bill._id}>
                                 <td>{index + 1}</td>
                                 <td>{bill.name}</td>
                                 <td>{bill.email}</td>
@@ -244,6 +256,18 @@ const DataTable = () => {
                         ))}
                     </tbody>
                 </Table>
+                <div>
+                    <Pagination>
+                        {[...Array(pageCount).keys()].map((number) => (
+                            <Pagination.Item
+                                active={page === number}
+                                onClick={() => setPage(number)}
+                            >
+                                {number + 1}
+                            </Pagination.Item>
+                        ))}
+                    </Pagination>
+                </div>
             </div>
         </section>
     );
