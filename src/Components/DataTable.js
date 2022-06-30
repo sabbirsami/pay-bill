@@ -19,11 +19,19 @@ const DataTable = () => {
     const [bills, setBills] = useState([]);
     const [search, setSearch] = useState([]);
     const [pageCount, setPageCount] = useState(0);
+    const [count, setCount] = useState(0);
     const [page, setPage] = useState(0);
+
     // MODAL
     const values = [true, "xxl-down"];
     const [fullscreen, setFullscreen] = useState(true);
     const [show, setShow] = useState(false);
+
+    //UPDATE MODAL
+    const [showUpdateModal, setShowUpdateModal] = useState(false);
+    const handleUpdateModalClose = () => setShowUpdateModal(false);
+    const handleUpdateModalShow = () => setShowUpdateModal(true);
+
     //DELETE MODAL
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deletingOrder, setDeletingOrder] = useState();
@@ -58,10 +66,11 @@ const DataTable = () => {
             .then((res) => res.json())
             .then((data) => {
                 const count = data.count;
+                setCount(count);
                 const pages = Math.ceil(count / 10);
                 setPageCount(pages);
             });
-    }, []);
+    }, [count]);
 
     function handleShow(breakpoint) {
         setFullscreen(breakpoint);
@@ -151,6 +160,142 @@ const DataTable = () => {
                         </div>
                     </div>
                 </div>
+
+                {/*  UPDATE MODAL  */}
+                <Modal
+                    show={showUpdateModal}
+                    onHide={handleUpdateModalClose}
+                    animation={true}
+                    centered
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title>Update</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form onSubmit={handleSubmit(onSubmit)}>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Full Name</Form.Label>
+                                <Form.Control
+                                    {...register("name")}
+                                    type="text"
+                                    placeholder=""
+                                    className="rounded-0"
+                                />
+                            </Form.Group>
+                            <Form.Group
+                                className="mb-3"
+                                controlId="formBasicEmail"
+                            >
+                                <Form.Label>Email address</Form.Label>
+                                <Form.Control
+                                    {...register("email", {
+                                        required: {
+                                            value: true,
+                                            message: "Email is Required",
+                                        },
+                                        pattern: {
+                                            value: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/,
+                                            message: "Provide a valid Email",
+                                        },
+                                    })}
+                                    type="email"
+                                    className="rounded-0"
+                                />
+                                <p className="text-danger">
+                                    {errors.email?.type === "required" && (
+                                        <small className="text-danger">
+                                            {errors.email.message}
+                                        </small>
+                                    )}
+
+                                    {errors.email?.type === "minLength" && (
+                                        <small className="text-danger">
+                                            {errors.email.message}
+                                        </small>
+                                    )}
+                                </p>
+                            </Form.Group>
+
+                            <Form.Group className="mb-3">
+                                <Form.Label>Phone Number</Form.Label>
+                                <Form.Control
+                                    className="rounded-0"
+                                    type="number"
+                                    {...register("phoneNumber", {
+                                        required: {
+                                            value: true,
+                                            message: "Phone Number is Required",
+                                        },
+                                        minLength: {
+                                            value: 11,
+                                            message: "Must be 11 characters",
+                                        },
+                                        maxLength: {
+                                            value: 11,
+                                            message: "Must be 11 characters",
+                                        },
+                                    })}
+                                />
+                                <p className="text-danger">
+                                    {errors.phoneNumber?.type ===
+                                        "required" && (
+                                        <small className="text-danger">
+                                            {errors.phoneNumber.message}
+                                        </small>
+                                    )}
+
+                                    {errors.phoneNumber?.type ===
+                                        "minLength" && (
+                                        <small className="text-danger">
+                                            {errors.phoneNumber.message}
+                                        </small>
+                                    )}
+                                    {errors.phoneNumber?.type ===
+                                        "maxLength" && (
+                                        <small className="text-danger">
+                                            {errors.phoneNumber.message}
+                                        </small>
+                                    )}
+                                </p>
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Paid Amount</Form.Label>
+                                <Form.Control
+                                    className="rounded-0"
+                                    type="number"
+                                    {...register("amount", {
+                                        required: {
+                                            value: true,
+                                            message: "Paid Amount is Required",
+                                        },
+                                    })}
+                                />
+                                <p className="text-danger">
+                                    {errors.amount?.type === "required" && (
+                                        <small className="text-danger">
+                                            {errors.amount.message}
+                                        </small>
+                                    )}
+                                </p>
+                            </Form.Group>
+                        </Form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button
+                            variant="secondary"
+                            onClick={handleUpdateModalClose}
+                        >
+                            Close
+                        </Button>
+                        <Button
+                            type="submit"
+                            variant="primary"
+                            onClick={handleUpdateModalClose}
+                        >
+                            Save Changes
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
 
                 {/*  DELETE MODAL  */}
                 <>
@@ -347,7 +492,10 @@ const DataTable = () => {
                                 <td>{bill.phoneNumber}</td>
                                 <td>{bill.amount}</td>
                                 <td className="d-flex align-items-center justify-content-center">
-                                    <button className="btn btn-success rounded-0 bg-gradient border-0 w-100">
+                                    <button
+                                        onClick={handleUpdateModalShow}
+                                        className="btn btn-success rounded-0 bg-gradient border-0 w-100"
+                                    >
                                         Edit
                                     </button>
                                     <button
@@ -368,8 +516,9 @@ const DataTable = () => {
                 <div className="mx-auto text-center">
                     <Pagination className="justify-content-center">
                         <Pagination.Prev onClick={handlePre} />
-                        {[...Array(pageCount).keys()].map((number) => (
+                        {[...Array(pageCount).keys()].map((number, index) => (
                             <Pagination.Item
+                                key={index}
                                 active={page === number}
                                 onClick={() => setPage(number)}
                             >

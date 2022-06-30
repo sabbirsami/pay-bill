@@ -5,10 +5,7 @@ import { useQuery } from "react-query";
 import Loading from "./Loading";
 
 const HeaderNavbar = () => {
-    const [amount, setAmount] = useState([]);
-    console.log(amount.email);
-
-    const { isLoading, error, data } = useQuery("repoData", () =>
+    const { isLoading, error, data } = useQuery(["amount"], () =>
         fetch("http://localhost:5000/bill-list").then((res) => res.json())
     );
     console.log(data);
