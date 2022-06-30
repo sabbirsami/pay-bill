@@ -3,8 +3,21 @@ import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import { useForm } from "react-hook-form";
 
 const DataTable = () => {
+    const {
+        register,
+        reset,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
+    const onSubmit = async (data) => {
+        console.log(data);
+        reset();
+    };
+
+    // MODAL
     const values = [true, "xxl-down"];
     const [fullscreen, setFullscreen] = useState(true);
     const [show, setShow] = useState(false);
@@ -29,7 +42,7 @@ const DataTable = () => {
                                 placeholder="Search"
                             />
                         </div>
-                        <div className="col-lg-4 text-end">
+                        <div className="col-lg-3 text-end">
                             <button
                                 key={values}
                                 onClick={() => handleShow(values)}
@@ -54,10 +67,11 @@ const DataTable = () => {
                     <Modal.Body>
                         <div className="col-lg-5 mx-auto justify-content-center align-items-center">
                             <div className=" p-5">
-                                <Form>
+                                <Form onSubmit={handleSubmit(onSubmit)}>
                                     <Form.Group className="mb-3">
                                         <Form.Label>Full Name</Form.Label>
                                         <Form.Control
+                                            {...register("name")}
                                             type="text"
                                             placeholder=""
                                             className="rounded-0"
@@ -69,9 +83,36 @@ const DataTable = () => {
                                     >
                                         <Form.Label>Email address</Form.Label>
                                         <Form.Control
+                                            {...register("email", {
+                                                required: {
+                                                    value: true,
+                                                    message:
+                                                        "Email is Required",
+                                                },
+                                                pattern: {
+                                                    value: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/,
+                                                    message:
+                                                        "Provide a valid Email",
+                                                },
+                                            })}
                                             type="email"
                                             className="rounded-0"
                                         />
+                                        <p className="text-danger">
+                                            {errors.email?.type ===
+                                                "required" && (
+                                                <small className="text-danger">
+                                                    {errors.email.message}
+                                                </small>
+                                            )}
+
+                                            {errors.email?.type ===
+                                                "minLength" && (
+                                                <small className="text-danger">
+                                                    {errors.email.message}
+                                                </small>
+                                            )}
+                                        </p>
                                     </Form.Group>
 
                                     <Form.Group className="mb-3">
@@ -79,14 +120,67 @@ const DataTable = () => {
                                         <Form.Control
                                             className="rounded-0"
                                             type="number"
+                                            {...register("phoneNumber", {
+                                                required: {
+                                                    value: true,
+                                                    message:
+                                                        "Phone Number is Required",
+                                                },
+                                                minLength: {
+                                                    value: 11,
+                                                    message:
+                                                        "Must be 11 characters",
+                                                },
+                                                maxLength: {
+                                                    value: 11,
+                                                    message:
+                                                        "Must be 11 characters",
+                                                },
+                                            })}
                                         />
+                                        <p className="text-danger">
+                                            {errors.phoneNumber?.type ===
+                                                "required" && (
+                                                <small className="text-danger">
+                                                    {errors.phoneNumber.message}
+                                                </small>
+                                            )}
+
+                                            {errors.phoneNumber?.type ===
+                                                "minLength" && (
+                                                <small className="text-danger">
+                                                    {errors.phoneNumber.message}
+                                                </small>
+                                            )}
+                                            {errors.phoneNumber?.type ===
+                                                "maxLength" && (
+                                                <small className="text-danger">
+                                                    {errors.phoneNumber.message}
+                                                </small>
+                                            )}
+                                        </p>
                                     </Form.Group>
                                     <Form.Group className="mb-3">
                                         <Form.Label>Paid Amount</Form.Label>
                                         <Form.Control
                                             className="rounded-0"
                                             type="number"
+                                            {...register("amount", {
+                                                required: {
+                                                    value: true,
+                                                    message:
+                                                        "Paid Amount is Required",
+                                                },
+                                            })}
                                         />
+                                        <p className="text-danger">
+                                            {errors.amount?.type ===
+                                                "required" && (
+                                                <small className="text-danger">
+                                                    {errors.amount.message}
+                                                </small>
+                                            )}
+                                        </p>
                                     </Form.Group>
 
                                     <Button
