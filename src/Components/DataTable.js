@@ -114,6 +114,7 @@ const DataTable = () => {
                         <Toaster />;
                         reset();
                     } else {
+                        toast.error("Fail to added");
                     }
                 }
             })

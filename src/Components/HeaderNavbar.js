@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Navbar } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import { useQuery } from "react-query";
+import Loading from "./Loading";
 
 const HeaderNavbar = () => {
     const [amount, setAmount] = useState([]);
@@ -12,7 +13,7 @@ const HeaderNavbar = () => {
     );
     console.log(data);
     if (isLoading) {
-        return <p>Loading...</p>;
+        return <Loading></Loading>;
     }
 
     return (
