@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 
 const HeaderNavbar = () => {
     return (
-        <div className="border-bottom">
+        <header className="border-bottom">
             <Navbar>
                 <Container>
                     <Navbar.Brand className="" href="#home">
@@ -18,7 +18,7 @@ const HeaderNavbar = () => {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-        </div>
+        </header>
     );
 };
 

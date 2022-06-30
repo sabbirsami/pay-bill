@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
@@ -15,6 +16,24 @@ const DataTable = () => {
     } = useForm();
     const onSubmit = async (data) => {
         console.log(data);
+        fetch("http://localhost:5000/bills", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((result) => {
+                if (result) {
+                    toast.success("Successfully added");
+                    <Toaster />;
+                    reset();
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
         reset();
     };
 
@@ -31,13 +50,19 @@ const DataTable = () => {
         setFullscreen(breakpoint);
         setShow(true);
     }
-    let size = 10;
+
+    const handleNext = () => {
+        setPage(page + 1);
+    };
+    const handlePre = () => {
+        setPage(page - 1);
+    };
+
     // LOAD DATA
     useEffect(() => {
         fetch(`http://localhost:5000/bills?page=${page}&size=${10}`)
             .then((res) => res.json())
             .then((data) => {
-                console.log(data);
                 setBills(data);
             });
     }, [page]);
@@ -239,7 +264,7 @@ const DataTable = () => {
                     <tbody className="">
                         {bills.map((bill, index) => (
                             <tr key={bill._id}>
-                                <td>{index + 1}</td>
+                                <td>{bill._id}</td>
                                 <td>{bill.name}</td>
                                 <td>{bill.email}</td>
                                 <td>{bill.phoneNumber}</td>
@@ -256,8 +281,9 @@ const DataTable = () => {
                         ))}
                     </tbody>
                 </Table>
-                <div>
-                    <Pagination>
+                <div className="mx-auto text-center">
+                    <Pagination className="justify-content-center">
+                        <Pagination.Prev onClick={handlePre} />
                         {[...Array(pageCount).keys()].map((number) => (
                             <Pagination.Item
                                 active={page === number}
@@ -266,6 +292,7 @@ const DataTable = () => {
                                 {number + 1}
                             </Pagination.Item>
                         ))}
+                        <Pagination.Next onClick={handleNext} />
                     </Pagination>
                 </div>
             </div>
