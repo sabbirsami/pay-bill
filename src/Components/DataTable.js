@@ -35,7 +35,6 @@ const DataTable = () => {
     };
 
     // LOAD DATA
-
     useEffect(() => {
         fetch(`http://localhost:5000/bills?page=${page}&size=${10}`)
             .then((res) => res.json())
@@ -43,6 +42,7 @@ const DataTable = () => {
                 setBills(data);
             });
     }, [page, bills]);
+
     useEffect(() => {
         fetch("http://localhost:5000/billsCount")
             .then((res) => res.json())
@@ -134,7 +134,7 @@ const DataTable = () => {
                 </div>
                 {/*  DELETE MODAL  */}
                 <>
-                    <Modal show={showDeleteModal} onHide={handleClose}>
+                    <Modal centered show={showDeleteModal} onHide={handleClose}>
                         <Modal.Header
                             className="border-0"
                             closeButton
