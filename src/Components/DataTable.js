@@ -31,7 +31,7 @@ const DataTable = () => {
 
     // LOAD DATA
     useEffect(() => {
-        fetch("data.json")
+        fetch("http://localhost:5000/bills")
             .then((res) => res.json())
             .then((data) => {
                 console.log(data);
