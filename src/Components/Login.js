@@ -112,13 +112,26 @@ const Login = () => {
                                             </p>
                                         </FloatingLabel>
 
-                                        <div className="py-3">
-                                            <button
-                                                className="rounded-3 px-5 py-2 btn btn-outline-primary"
-                                                type="submit"
-                                            >
-                                                Log In
-                                            </button>
+                                        <div className="py-3 row justify-content-between align-items-center">
+                                            <div className="col-lg-5">
+                                                <button
+                                                    className="rounded-3 px-5 py-2 btn btn-outline-success"
+                                                    type="submit"
+                                                >
+                                                    Log In
+                                                </button>
+                                            </div>
+                                            <div className="col-lg-7">
+                                                <p className="mt-3">
+                                                    Don't have an account?{" "}
+                                                    <Link
+                                                        className="text-success"
+                                                        to={"/sign-up"}
+                                                    >
+                                                        Sign Up
+                                                    </Link>
+                                                </p>
+                                            </div>
                                         </div>
                                     </Form>
                                 </div>
