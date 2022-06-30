@@ -22,15 +22,27 @@ const DataTable = () => {
     const values = [true, "xxl-down"];
     const [fullscreen, setFullscreen] = useState(true);
     const [show, setShow] = useState(false);
+    //DELETE MODAL
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deletingOrder, setDeletingOrder] = useState();
+    const handleClose = () => setShowDeleteModal(false);
+    const handleModalOpen = (id) => {
+        setShowDeleteModal(true);
+        setDeletingOrder(id);
+    };
+    const handleConfirm = (id) => {
+        handleDelete(id);
+    };
 
     // LOAD DATA
+
     useEffect(() => {
         fetch(`http://localhost:5000/bills?page=${page}&size=${10}`)
             .then((res) => res.json())
             .then((data) => {
                 setBills(data);
             });
-    }, [page]);
+    }, [page, bills]);
     useEffect(() => {
         fetch("http://localhost:5000/billsCount")
             .then((res) => res.json())
@@ -62,6 +74,7 @@ const DataTable = () => {
                 if (result) {
                     toast.success("Successfully deleted");
                     reset();
+                    handleClose();
                 }
             })
             .catch((error) => {
@@ -119,6 +132,35 @@ const DataTable = () => {
                         </div>
                     </div>
                 </div>
+                {/*  DELETE MODAL  */}
+                <>
+                    <Modal show={showDeleteModal} onHide={handleClose}>
+                        <Modal.Header
+                            className="border-0"
+                            closeButton
+                        ></Modal.Header>
+                        <Modal.Body className="text-center">
+                            Are you sure? you want to{" "}
+                            <span className="text-danger">Cancel Order</span>
+                        </Modal.Body>
+                        <Modal.Footer className="border-0 text-center justify-content-center pb-5">
+                            <Button
+                                className="rounded-0 btn-outline-success alert-success py-2 px-5"
+                                variant="secondary"
+                                onClick={handleClose}
+                            >
+                                No
+                            </Button>
+                            <Button
+                                className="rounded-0 btn-danger py-2 px-5"
+                                variant="primary"
+                                onClick={() => handleConfirm(deletingOrder)}
+                            >
+                                Yes
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
+                </>
 
                 {/* ADD NEW BILL MODAL */}
 
@@ -290,7 +332,9 @@ const DataTable = () => {
                                         Edit
                                     </button>
                                     <button
-                                        onClick={() => handleDelete(bill._id)}
+                                        onClick={() =>
+                                            handleModalOpen(bill._id)
+                                        }
                                         className="btn btn-danger rounded-0 border-0 bg-gradient w-100"
                                     >
                                         Delete

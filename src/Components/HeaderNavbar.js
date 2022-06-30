@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Navbar } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 
 const HeaderNavbar = () => {
+    const [amount, setAmount] = useState([]);
+    console.log(amount.email);
+
+    useEffect(() => {
+        fetch(`http://localhost:5000/bills`)
+            .then((res) => res.json())
+            .then((data) => {
+                setAmount(data);
+            });
+    }, []);
     return (
         <header className="border-bottom">
             <Navbar>
