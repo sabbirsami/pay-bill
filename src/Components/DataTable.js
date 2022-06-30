@@ -1,9 +1,32 @@
 import React from "react";
 import Table from "react-bootstrap/Table";
+import Form from "react-bootstrap/Form";
 const DataTable = () => {
     return (
-        <div>
+        <section>
             <div className="container py-4">
+                {/* ADD NEW BILL SECTION  */}
+                <div className="py-4">
+                    <div className=" row align-items-center justify-content-between">
+                        <div className="col-lg-2">
+                            <h4>Billing</h4>
+                        </div>
+                        <div className="col-lg-6">
+                            <Form.Control
+                                type="text"
+                                className="rounded-0 "
+                                placeholder="Search"
+                            />
+                        </div>
+                        <div className="col-lg-4 text-end">
+                            <button className="btn btn-success border-0 bg-gradient rounded-0 px-4">
+                                Add New Bill
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* DATA TABLE SECTION  */}
                 <Table bordered hover>
                     <thead className="bg-dark text-white border-dark">
                         <tr>
@@ -68,7 +91,7 @@ const DataTable = () => {
                     </tbody>
                 </Table>
             </div>
-        </div>
+        </section>
     );
 };
 
