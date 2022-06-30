@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
@@ -17,6 +17,8 @@ const DataTable = () => {
         reset();
     };
 
+    const [bills, setBills] = useState([]);
+
     // MODAL
     const values = [true, "xxl-down"];
     const [fullscreen, setFullscreen] = useState(true);
@@ -26,9 +28,20 @@ const DataTable = () => {
         setFullscreen(breakpoint);
         setShow(true);
     }
+
+    // LOAD DATA
+    useEffect(() => {
+        fetch("data.json")
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data);
+                setBills(data);
+            });
+    }, []);
+
     return (
         <section>
-            <div className="container py-4">
+            <div className="container py-1">
                 {/* ADD NEW BILL SECTION  */}
                 <div className="py-4">
                     <div className=" row align-items-center justify-content-between">
@@ -212,51 +225,23 @@ const DataTable = () => {
                         </tr>
                     </thead>
                     <tbody className="">
-                        <tr>
-                            <td>1</td>
-                            <td>Mark Deu</td>
-                            <td>Otto@gmail.com</td>
-                            <td>+8807410242</td>
-                            <td>10242</td>
-                            <td className="d-flex align-items-center justify-content-center">
-                                <button className="btn btn-success rounded-0 bg-gradient border-0 w-100">
-                                    Edit
-                                </button>
-                                <button className="btn btn-danger rounded-0 border-0 bg-gradient w-100">
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Mark Deu</td>
-                            <td>Otto@gmail.com</td>
-                            <td>+8807410242</td>
-                            <td>10242</td>
-                            <td className="d-flex align-items-center justify-content-center">
-                                <button className="btn btn-success rounded-0 border-0 bg-gradient w-100">
-                                    Edit
-                                </button>
-                                <button className="btn btn-danger rounded-0 border-0 bg-gradient w-100">
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Mark Deu</td>
-                            <td>Otto@gmail.com</td>
-                            <td>+8807410242</td>
-                            <td>10242</td>
-                            <td className="d-flex align-items-center justify-content-center">
-                                <button className="btn btn-success rounded-0 bg-gradient border-0 w-100">
-                                    Edit
-                                </button>
-                                <button className="btn btn-danger rounded-0 bg-gradient border-0 w-100">
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
+                        {bills.map((bill, index) => (
+                            <tr>
+                                <td>{index + 1}</td>
+                                <td>{bill.name}</td>
+                                <td>{bill.email}</td>
+                                <td>{bill.phoneNumber}</td>
+                                <td>{bill.amount}</td>
+                                <td className="d-flex align-items-center justify-content-center">
+                                    <button className="btn btn-success rounded-0 bg-gradient border-0 w-100">
+                                        Edit
+                                    </button>
+                                    <button className="btn btn-danger rounded-0 border-0 bg-gradient w-100">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </Table>
             </div>
