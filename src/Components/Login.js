@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 const Login = () => {
+    let navigate = useNavigate();
+    const [users, setUsers] = useState([]);
     const {
         register,
         formState: { errors },
@@ -12,8 +14,27 @@ const Login = () => {
         handleSubmit,
     } = useForm();
 
+    let loginError;
     const onSubmit = (data) => {
-        console.log(data);
+        const password = data.password;
+        const email = data.email;
+        fetch(`http://localhost:5000/registration/${email}`)
+            .then((res) => res.json())
+            .then((result) => {
+                if (email === result.email && password == result.password) {
+                    navigate("/");
+                } else {
+                    return (loginError = (
+                        <p>
+                            <small className="text-danger">
+                                Something wrong! Please try again.
+                            </small>
+                        </p>
+                    ));
+                }
+                console.log(result);
+            });
+
         reset();
     };
     return (
@@ -111,6 +132,7 @@ const Login = () => {
                                                 )}
                                             </p>
                                         </FloatingLabel>
+                                        {loginError}
 
                                         <div className="py-3 row justify-content-between align-items-center">
                                             <div className="col-lg-5">
@@ -126,7 +148,7 @@ const Login = () => {
                                                     Don't have an account?{" "}
                                                     <Link
                                                         className="text-success"
-                                                        to={"/sign-up"}
+                                                        to={"/registration"}
                                                     >
                                                         Sign Up
                                                     </Link>

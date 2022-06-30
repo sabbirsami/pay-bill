@@ -1,4 +1,5 @@
 import "./Style.css";
+import { Toaster } from "react-hot-toast";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Home from "./Components/Home/Home";
 import { Route, Routes } from "react-router-dom";
@@ -18,9 +19,10 @@ function App() {
                         </RequireAuth>
                     }
                 ></Route>
-                <Route path="/sign-up" element={<SignUp />}></Route>
+                <Route path="/registration" element={<SignUp />}></Route>
                 <Route path="/login" element={<Login />}></Route>
             </Routes>
+            <Toaster />;
         </div>
     );
 }

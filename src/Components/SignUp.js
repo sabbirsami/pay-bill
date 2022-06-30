@@ -11,9 +11,23 @@ const SignUp = () => {
         reset,
         handleSubmit,
     } = useForm();
+    let navigate = useNavigate();
 
     const onSubmit = (data) => {
         console.log(data);
+        fetch("http://localhost:5000/registration", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+            .then((res) => res.json())
+            .then((result) => {
+                navigate("/");
+                console.log(result);
+            });
+
         reset();
     };
     return (
@@ -35,7 +49,13 @@ const SignUp = () => {
                                             className="mb-3"
                                         >
                                             <Form.Control
-                                                {...register("name")}
+                                                {...register("name", {
+                                                    required: {
+                                                        value: true,
+                                                        message:
+                                                            "Name is Required",
+                                                    },
+                                                })}
                                                 className="border-bottom border-0 rounded-3"
                                                 type="text"
                                                 placeholder="name"
@@ -127,10 +147,10 @@ const SignUp = () => {
                                         <div className="py-3 row justify-content-between align-items-center">
                                             <div className="col-lg-5">
                                                 <button
-                                                    className="rounded-3 px-5 py-2 btn btn-outline-success"
+                                                    className="rounded-3 px-4 py-2 btn btn-outline-success"
                                                     type="submit"
                                                 >
-                                                    Sign Up
+                                                    Registration
                                                 </button>
                                             </div>
                                             <div className="col-lg-7">
