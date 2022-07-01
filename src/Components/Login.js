@@ -22,7 +22,7 @@ const Login = () => {
             .then((res) => res.json())
             .then((result) => {
                 if (email === result.email && password == result.password) {
-                    navigate("/");
+                    navigate("/billing");
                 }
                 console.log(result);
             });

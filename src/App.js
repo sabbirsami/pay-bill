@@ -15,7 +15,7 @@ function App() {
             <div>
                 <Routes>
                     <Route
-                        path="/"
+                        path="/billing"
                         element={
                             <RequireAuth>
                                 <Home />
@@ -23,7 +23,7 @@ function App() {
                         }
                     ></Route>
                     <Route path="/registration" element={<SignUp />}></Route>
-                    <Route path="/login" element={<Login />}></Route>
+                    <Route path="/" element={<Login />}></Route>
                 </Routes>
                 <Toaster />;
             </div>

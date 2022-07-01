@@ -41,8 +41,11 @@ const SignUp = () => {
             })
                 .then((res) => res.json())
                 .then((result) => {
-                    if (result.acknowledged === true) {
-                        navigate("/");
+                    console.log(result);
+                    const accessToken = result.token;
+                    localStorage.setItem("accessToken", accessToken);
+                    if (accessToken) {
+                        navigate("/billing");
                     }
                     console.log(result);
                 });
