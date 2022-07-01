@@ -18,7 +18,7 @@ const Login = () => {
         setLoginError(" Email & Password don't match! Please try again.");
         const password = data.password;
         const email = data.email;
-        fetch(`http://localhost:5000/registration/${email}`)
+        fetch(`https://pay-bill-2022.herokuapp.com/registration/${email}`)
             .then((res) => res.json())
             .then((result) => {
                 if (email === result.email && password == result.password) {

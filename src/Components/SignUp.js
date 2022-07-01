@@ -18,7 +18,7 @@ const SignUp = () => {
     } = useForm();
     let navigate = useNavigate();
 
-    fetch(`http://localhost:5000/registration/${usersEmail}`)
+    fetch(`https://pay-bill-2022.herokuapp.com/registration/${usersEmail}`)
         .then((res) => res.json())
         .then((result) => {
             if (usersEmail !== result.email) {
@@ -32,7 +32,7 @@ const SignUp = () => {
 
         setUsersEmail(data.email);
         if (databaseUserEmail !== usersEmail) {
-            fetch("http://localhost:5000/registration", {
+            fetch("https://pay-bill-2022.herokuapp.com/registration", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

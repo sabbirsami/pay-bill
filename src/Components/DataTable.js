@@ -64,13 +64,17 @@ const DataTable = () => {
         data: searchData,
         refetch,
     } = useQuery(["amount"], () =>
-        fetch("http://localhost:5000/bill-list").then((res) => res.json())
+        fetch("https://pay-bill-2022.herokuapp.com/bill-list").then((res) =>
+            res.json()
+        )
     );
     // console.log(searchData);
 
     // LOAD DATA BY PAGE
     useEffect(() => {
-        fetch(`http://localhost:5000/bills?page=${page}&size=${10}`)
+        fetch(
+            `https://pay-bill-2022.herokuapp.com/bills?page=${page}&size=${10}`
+        )
             .then((res) => res.json())
             .then((data) => {
                 setBills(data);
@@ -79,7 +83,7 @@ const DataTable = () => {
 
     // GET TOTAL BILLS NUMBER
     useEffect(() => {
-        fetch("http://localhost:5000/billsCount")
+        fetch("https://pay-bill-2022.herokuapp.com/billsCount")
             .then((res) => res.json())
             .then((data) => {
                 const count = data.count;
@@ -115,7 +119,7 @@ const DataTable = () => {
     // DELETE BILL
     const handleDelete = (id) => {
         console.log(id);
-        fetch(`http://localhost:5000/bills/${id}`, {
+        fetch(`https://pay-bill-2022.herokuapp.com/bills/${id}`, {
             method: "DELETE",
         })
             .then((response) => response.json())
@@ -133,7 +137,7 @@ const DataTable = () => {
         reset();
     };
     const updateBill = (data) => {
-        fetch(`http://localhost:5000/bills/${data.email}`, {
+        fetch(`https://pay-bill-2022.herokuapp.com/bills/${data.email}`, {
             method: "PUT",
             headers: {
                 "content-type": "application/json",
@@ -149,7 +153,7 @@ const DataTable = () => {
 
     // ADD NEW BILL
     const onSubmit = async (data) => {
-        fetch("http://localhost:5000/bills", {
+        fetch("https://pay-bill-2022.herokuapp.com/bills", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

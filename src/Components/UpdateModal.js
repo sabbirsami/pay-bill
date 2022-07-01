@@ -20,7 +20,7 @@ const UpdateModal = () => {
 
     const onSubmit = async (data) => {
         console.log(data);
-        fetch("http://localhost:5000/bills", {
+        fetch("https://pay-bill-2022.herokuapp.com/bills", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

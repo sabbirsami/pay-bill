@@ -6,7 +6,9 @@ import Loading from "./Loading";
 
 const HeaderNavbar = () => {
     const { isLoading, error, data } = useQuery(["amount"], () =>
-        fetch("http://localhost:5000/bill-list").then((res) => res.json())
+        fetch("https://pay-bill-2022.herokuapp.com/bill-list").then((res) =>
+            res.json()
+        )
     );
 
     if (isLoading) {
