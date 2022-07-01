@@ -184,7 +184,7 @@ const SignUp = () => {
                                                     Already have an account?{" "}
                                                     <Link
                                                         className="text-success"
-                                                        to={"/login"}
+                                                        to={"/"}
                                                     >
                                                         Log In
                                                     </Link>

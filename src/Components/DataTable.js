@@ -8,6 +8,10 @@ import { useForm } from "react-hook-form";
 import Pagination from "react-bootstrap/Pagination";
 import { useQuery } from "react-query";
 import Loading from "./Loading";
+import {
+    HiOutlineArrowNarrowRight,
+    HiOutlineArrowNarrowLeft,
+} from "react-icons/hi";
 
 const DataTable = () => {
     const {
@@ -550,9 +554,15 @@ const DataTable = () => {
                 {/* PAGINATION AREA  */}
                 <div className="mx-auto text-center">
                     <Pagination className="justify-content-center">
-                        <Pagination.Prev onClick={handlePre} />
+                        <Pagination.Prev
+                            className="border-0 m-1"
+                            onClick={handlePre}
+                        >
+                            <HiOutlineArrowNarrowLeft />
+                        </Pagination.Prev>
                         {[...Array(pageCount).keys()].map((number, index) => (
                             <Pagination.Item
+                                className="border-0 m-1"
                                 key={index}
                                 active={page === number}
                                 onClick={() => setPage(number)}
@@ -560,7 +570,9 @@ const DataTable = () => {
                                 {number + 1}
                             </Pagination.Item>
                         ))}
-                        <Pagination.Next onClick={handleNext} />
+                        <Pagination.Next className="m-1" onClick={handleNext}>
+                            <HiOutlineArrowNarrowRight />
+                        </Pagination.Next>
                     </Pagination>
                 </div>
             </div>
