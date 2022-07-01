@@ -7,30 +7,30 @@ import SignUp from "./Components/SignUp";
 import RequireAuth from "./Components/RequireAuth";
 import Login from "./Components/Login";
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
-import PageNotFount from "./Components/PageNotFount";
+import PageNotFound from "./Components/PageNotFound";
 
 const queryClient = new QueryClient();
 function App() {
-    return (
-        <QueryClientProvider client={queryClient}>
-            <div>
-                <Routes>
-                    <Route
-                        path="/billing"
-                        element={
-                            <RequireAuth>
-                                <Home />
-                            </RequireAuth>
-                        }
-                    ></Route>
-                    <Route path="/registration" element={<SignUp />}></Route>
-                    <Route path="/" element={<Login />}></Route>
-                    <Route path="*" element={<PageNotFount />}></Route>
-                </Routes>
-                <Toaster />;
-            </div>
-        </QueryClientProvider>
-    );
+  return (
+    <QueryClientProvider client={queryClient}>
+      <div>
+        <Routes>
+          <Route
+            path="/billing"
+            element={
+              <RequireAuth>
+                <Home />
+              </RequireAuth>
+            }
+          />
+          <Route path="/registration" element={<SignUp />} />
+          <Route path="/" element={<Login />} />
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+        <Toaster />;
+      </div>
+    </QueryClientProvider>
+  );
 }
 
 export default App;
