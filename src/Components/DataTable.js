@@ -103,6 +103,10 @@ const DataTable = () => {
             });
         reset();
     };
+    const updateBill = async (data) => {
+        console.log(data);
+        handleUpdateModalClose();
+    };
 
     // ADD NEW BILL
     const onSubmit = async (data) => {
@@ -172,7 +176,7 @@ const DataTable = () => {
                         <Modal.Title>Update</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <Form onSubmit={handleSubmit(onSubmit)}>
+                        <Form onSubmit={handleSubmit(updateBill)}>
                             <Form.Group className="mb-3">
                                 <Form.Label>Full Name</Form.Label>
                                 <Form.Control
@@ -287,11 +291,7 @@ const DataTable = () => {
                         >
                             Close
                         </Button>
-                        <Button
-                            type="submit"
-                            variant="primary"
-                            onClick={handleUpdateModalClose}
-                        >
+                        <Button type="submit" variant="primary">
                             Save Changes
                         </Button>
                     </Modal.Footer>

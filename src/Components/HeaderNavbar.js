@@ -8,7 +8,7 @@ const HeaderNavbar = () => {
     const { isLoading, error, data } = useQuery(["amount"], () =>
         fetch("http://localhost:5000/bill-list").then((res) => res.json())
     );
-    console.log(data);
+
     if (isLoading) {
         return <Loading></Loading>;
     }
@@ -17,7 +17,7 @@ const HeaderNavbar = () => {
         <header className="border-bottom">
             <Navbar>
                 <Container>
-                    <Navbar.Brand className="" href="#home">
+                    <Navbar.Brand className="" href="/">
                         <i className="fs-2">Pay Bill</i>
                     </Navbar.Brand>
                     <Navbar.Toggle />

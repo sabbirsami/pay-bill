@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 
 const Login = () => {
     let navigate = useNavigate();
-    const [users, setUsers] = useState([]);
+    const [loginError, setLoginError] = useState("");
     const {
         register,
         formState: { errors },
@@ -14,8 +14,8 @@ const Login = () => {
         handleSubmit,
     } = useForm();
 
-    let loginError;
     const onSubmit = (data) => {
+        setLoginError(" Email & Password don't match! Please try again.");
         const password = data.password;
         const email = data.email;
         fetch(`http://localhost:5000/registration/${email}`)
@@ -23,14 +23,6 @@ const Login = () => {
             .then((result) => {
                 if (email === result.email && password == result.password) {
                     navigate("/");
-                } else {
-                    return (loginError = (
-                        <p>
-                            <small className="text-danger">
-                                Something wrong! Please try again.
-                            </small>
-                        </p>
-                    ));
                 }
                 console.log(result);
             });
@@ -132,7 +124,11 @@ const Login = () => {
                                                 )}
                                             </p>
                                         </FloatingLabel>
-                                        {loginError}
+                                        <p>
+                                            <small className="text-danger">
+                                                {loginError}
+                                            </small>
+                                        </p>
 
                                         <div className="py-3 row justify-content-between align-items-center">
                                             <div className="col-lg-5">
