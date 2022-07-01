@@ -3,6 +3,7 @@ import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import "../Style.css";
 
 const Login = () => {
     let navigate = useNavigate();
@@ -30,8 +31,8 @@ const Login = () => {
         reset();
     };
     return (
-        <div>
-            <div className="py-5">
+        <div className="background-img">
+            <div className="py-5 ">
                 <div className="container">
                     <p className="display-5 text-center">
                         <i>Pay Bill</i>
@@ -39,7 +40,7 @@ const Login = () => {
                     <div className="row">
                         <div className="col-lg-5 mx-auto">
                             <div className="py-lg-5">
-                                <div className="p-5 shadow rounded-3 bg-light">
+                                <div className="p-5 shadow rounded-3 bg-white bg-gradient">
                                     <h2 className="pt-3 pb-4">Log In</h2>
                                     <Form onSubmit={handleSubmit(onSubmit)}>
                                         <FloatingLabel
@@ -60,7 +61,7 @@ const Login = () => {
                                                             "Provide a valid Email",
                                                     },
                                                 })}
-                                                className="border-bottom border-0 rounded-3"
+                                                className="border rounded-3"
                                                 type="email"
                                                 placeholder="name@example.com"
                                             />
@@ -98,7 +99,7 @@ const Login = () => {
                                                             "Must be 6 characters or longer",
                                                     },
                                                 })}
-                                                className="border-bottom border-0 rounded-3"
+                                                className="border rounded-3"
                                                 type="password"
                                                 placeholder="Password"
                                             />
@@ -133,7 +134,7 @@ const Login = () => {
                                         <div className="py-3 row justify-content-between align-items-center">
                                             <div className="col-lg-5">
                                                 <button
-                                                    className="rounded-3 px-5 py-2 btn btn-outline-success"
+                                                    className="rounded-3 px-5 py-2 btn btn-outline-primary bg-gradient"
                                                     type="submit"
                                                 >
                                                     Log In
@@ -143,7 +144,7 @@ const Login = () => {
                                                 <p className="mt-3">
                                                     Don't have an account?{" "}
                                                     <Link
-                                                        className="text-success"
+                                                        className="text-primary"
                                                         to={"/registration"}
                                                     >
                                                         Sign Up

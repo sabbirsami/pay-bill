@@ -5,3 +5,9 @@ body {
     background-color: #2d815a !important;
     color: white !important;
 }
+.background-img {
+    background-image: url("./img/awards-bg.svg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
