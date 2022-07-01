@@ -5,8 +5,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 const SignUp = () => {
-    const [usersEmail, setUsersEmail] = useState([]);
-    const [databaseUserEmail, setDatabaseUserEmail] = useState([]);
+    const [usersEmail, setUsersEmail] = useState("");
+    const [databaseUserEmail, setDatabaseUserEmail] = useState("");
+    console.log(databaseUserEmail, usersEmail);
+
+    const [loginError, setLoginError] = useState("");
     const {
         register,
         formState: { errors },
@@ -14,25 +17,19 @@ const SignUp = () => {
         handleSubmit,
     } = useForm();
     let navigate = useNavigate();
-    let loginError;
+
     fetch(`http://localhost:5000/registration/${usersEmail}`)
         .then((res) => res.json())
         .then((result) => {
-            if (usersEmail === result.email) {
+            if (usersEmail !== result.email) {
                 setDatabaseUserEmail(result.email);
-                loginError = (
-                    <p>
-                        <small className="text-danger">
-                            Email already used.
-                        </small>
-                    </p>
-                );
             }
             console.log(result);
         });
 
     const onSubmit = (data) => {
-        console.log(data);
+        setLoginError(" Email already used.");
+
         setUsersEmail(data.email);
         if (databaseUserEmail !== usersEmail) {
             fetch("http://localhost:5000/registration", {
@@ -44,7 +41,9 @@ const SignUp = () => {
             })
                 .then((res) => res.json())
                 .then((result) => {
-                    navigate("/");
+                    if (result.acknowledged === true) {
+                        navigate("/");
+                    }
                     console.log(result);
                 });
 

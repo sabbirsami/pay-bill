@@ -7,6 +7,7 @@ import Button from "react-bootstrap/Button";
 import { useForm } from "react-hook-form";
 import Pagination from "react-bootstrap/Pagination";
 import { useQuery } from "react-query";
+import Loading from "./Loading";
 
 const DataTable = () => {
     const {
@@ -18,6 +19,7 @@ const DataTable = () => {
 
     const [bills, setBills] = useState([]);
     const [search, setSearch] = useState([]);
+    // console.log(search);
     const [pageCount, setPageCount] = useState(0);
     const [count, setCount] = useState(0);
     const [page, setPage] = useState(0);
@@ -43,19 +45,21 @@ const DataTable = () => {
     const handleConfirm = (id) => {
         handleDelete(id);
     };
-
-    // const handleSearch = (text) => {
-    //     const filtered = countries.filter((country) =>
-    //         country.name.common.includes(text)
-    //     );
-    //     setSearch(filtered);
+    const {
+        isLoading,
+        error,
+        data: searchData,
+        refetch,
+    } = useQuery(["amount"], () =>
+        fetch("http://localhost:5000/bill-list").then((res) => res.json())
+    );
+    // console.log(searchData);
 
     // LOAD DATA BY PAGE
     useEffect(() => {
         fetch(`http://localhost:5000/bills?page=${page}&size=${10}`)
             .then((res) => res.json())
             .then((data) => {
-                setSearch(data);
                 setBills(data);
             });
     }, [page, bills]);
@@ -71,6 +75,9 @@ const DataTable = () => {
                 setPageCount(pages);
             });
     }, [count]);
+    if (isLoading) {
+        return <Loading />;
+    }
 
     function handleShow(breakpoint) {
         setFullscreen(breakpoint);
@@ -84,6 +91,14 @@ const DataTable = () => {
         setPage(page - 1);
     };
 
+    const handleSearch = (text) => {
+        const filtered = searchData.result.filter((data) =>
+            data.name.toLowerCase().includes(text.toLowerCase())
+        );
+        // console.log(filtered);
+        // setBills(filtered);
+    };
+
     // DELETE BILL
     const handleDelete = (id) => {
         console.log(id);
@@ -95,6 +110,7 @@ const DataTable = () => {
                 if (result) {
                     toast.success("Successfully deleted");
                     reset();
+                    refetch();
                     handleClose();
                 }
             })
@@ -126,6 +142,7 @@ const DataTable = () => {
                         toast.success("Successfully added");
                         <Toaster />;
                         reset();
+                        refetch();
                     } else {
                         toast.error("Fail to added");
                     }
@@ -149,6 +166,7 @@ const DataTable = () => {
                         <div className="col-lg-6">
                             <Form.Control
                                 type="text"
+                                onChange={(e) => handleSearch(e.target.value)}
                                 className="rounded-0 "
                                 placeholder="Search"
                             />
