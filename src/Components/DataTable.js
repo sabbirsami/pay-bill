@@ -13,13 +13,26 @@ import {
   HiOutlineArrowNarrowLeft,
 } from "react-icons/hi";
 
-const numberToDollars = (number) => {
+const formatDollars = (number) => {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
   }).format(number);
 };
 
+const formatPhoneNumber = (str) => {
+  //Filter only numbers from the input
+  let cleaned = Number(str).toString();
+
+  //Check if the input is of correct length
+  let match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+
+  if (match) {
+    return "(" + match[1] + ") " + match[2] + "-" + match[3];
+  }
+
+  return null;
+};
 const DataTable = () => {
   const {
     register,
@@ -509,8 +522,8 @@ const DataTable = () => {
                 <td>{bill._id}</td>
                 <td>{bill.name}</td>
                 <td>{bill.email}</td>
-                <td>{bill.phoneNumber}</td>
-                <td>{numberToDollars(bill.amount)}</td>
+                <td>{formatPhoneNumber(bill.phoneNumber)}</td>
+                <td>{formatDollars(bill.amount)}</td>
                 <td className="d-flex align-items-center justify-content-center">
                   <button
                     onClick={() => handleUpdateModalShow(bill.email)}
