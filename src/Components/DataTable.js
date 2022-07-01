@@ -31,8 +31,17 @@ const DataTable = () => {
 
     //UPDATE MODAL
     const [showUpdateModal, setShowUpdateModal] = useState(false);
+    const [editing, setEditing] = useState();
+    // console.log(editing);
     const handleUpdateModalClose = () => setShowUpdateModal(false);
-    const handleUpdateModalShow = () => setShowUpdateModal(true);
+    const handleUpdateModalShow = (mail) => {
+        handleUpdateConfirm(mail);
+        setShowUpdateModal(true);
+    };
+    const handleUpdateConfirm = (mail) => {
+        updateBill(mail);
+        setEditing(mail);
+    };
 
     //DELETE MODAL
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -119,14 +128,23 @@ const DataTable = () => {
             });
         reset();
     };
-    const updateBill = async (data) => {
-        console.log(data);
+    const updateBill = (data) => {
+        fetch(`http://localhost:5000/bills/${data.email}`, {
+            method: "PUT",
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+            .then((res) => res.json())
+            .then((result) => {
+                alert("item Updated successfully!!!");
+            });
         handleUpdateModalClose();
     };
 
     // ADD NEW BILL
     const onSubmit = async (data) => {
-        console.log(data);
         fetch("http://localhost:5000/bills", {
             method: "POST",
             headers: {
@@ -194,7 +212,7 @@ const DataTable = () => {
                         <Modal.Title>Update</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <Form onSubmit={handleSubmit(updateBill)}>
+                        <Form>
                             <Form.Group className="mb-3">
                                 <Form.Label>Full Name</Form.Label>
                                 <Form.Control
@@ -210,16 +228,9 @@ const DataTable = () => {
                             >
                                 <Form.Label>Email address</Form.Label>
                                 <Form.Control
-                                    {...register("email", {
-                                        required: {
-                                            value: true,
-                                            message: "Email is Required",
-                                        },
-                                        pattern: {
-                                            value: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/,
-                                            message: "Provide a valid Email",
-                                        },
-                                    })}
+                                    {...register("email", {})}
+                                    value={editing}
+                                    readOnly
                                     type="email"
                                     className="rounded-0"
                                 />
@@ -309,7 +320,11 @@ const DataTable = () => {
                         >
                             Close
                         </Button>
-                        <Button type="submit" variant="primary">
+                        <Button
+                            onClick={handleSubmit(updateBill)}
+                            type="submit"
+                            variant="primary"
+                        >
                             Save Changes
                         </Button>
                     </Modal.Footer>
@@ -511,7 +526,9 @@ const DataTable = () => {
                                 <td>{bill.amount}</td>
                                 <td className="d-flex align-items-center justify-content-center">
                                     <button
-                                        onClick={handleUpdateModalShow}
+                                        onClick={() =>
+                                            handleUpdateModalShow(bill.email)
+                                        }
                                         className="btn btn-success rounded-0 bg-gradient border-0 w-100"
                                     >
                                         Edit
