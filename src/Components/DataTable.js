@@ -79,6 +79,7 @@ const DataTable = () => {
             .then((data) => {
                 setBills(data);
             });
+        // refetch();
     }, [page, bills]);
 
     // GET TOTAL BILLS NUMBER
@@ -137,6 +138,7 @@ const DataTable = () => {
         reset();
     };
     const updateBill = (data) => {
+        console.log(data);
         fetch(`https://pay-bill-2022.herokuapp.com/bills/${data.email}`, {
             method: "PUT",
             headers: {
@@ -146,13 +148,16 @@ const DataTable = () => {
         })
             .then((res) => res.json())
             .then((result) => {
+                reset();
                 alert("item Updated successfully!!!");
             });
+        refetch();
         handleUpdateModalClose();
     };
 
     // ADD NEW BILL
     const onSubmit = async (data) => {
+        console.log(data);
         fetch("https://pay-bill-2022.herokuapp.com/bills", {
             method: "POST",
             headers: {

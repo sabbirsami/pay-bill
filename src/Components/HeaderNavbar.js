@@ -19,7 +19,7 @@ const HeaderNavbar = () => {
         <header className="border-bottom">
             <Navbar>
                 <Container>
-                    <Navbar.Brand className="" href="/">
+                    <Navbar.Brand className="" href="/billing">
                         <i className="fs-2">Pay Bill</i>
                     </Navbar.Brand>
                     <Navbar.Toggle />
