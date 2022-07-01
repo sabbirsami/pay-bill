@@ -56,7 +56,7 @@ const SignUp = () => {
         }
     };
     return (
-        <div>
+        <div className="background-img">
             <div className="py-5">
                 <div className="container">
                     <p className="display-5 text-center">
@@ -65,7 +65,7 @@ const SignUp = () => {
                     <div className="row">
                         <div className="col-lg-5 mx-auto">
                             <div className="py-lg-5">
-                                <div className="p-5 shadow rounded-3 bg-light">
+                                <div className="p-5 shadow rounded-3 bg-white">
                                     <h2 className="pt-3 pb-4">Sign Up</h2>
                                     <Form onSubmit={handleSubmit(onSubmit)}>
                                         <FloatingLabel
@@ -81,7 +81,7 @@ const SignUp = () => {
                                                             "Name is Required",
                                                     },
                                                 })}
-                                                className="border-bottom border-0 rounded-3"
+                                                className="border rounded-3"
                                                 type="text"
                                                 placeholder="name"
                                             />
@@ -104,7 +104,7 @@ const SignUp = () => {
                                                             "Provide a valid Email",
                                                     },
                                                 })}
-                                                className="border-bottom border-0 rounded-3"
+                                                className="border rounded-3"
                                                 type="email"
                                                 placeholder="name@example.com"
                                             />
@@ -143,7 +143,7 @@ const SignUp = () => {
                                                             "Must be 6 characters or longer",
                                                     },
                                                 })}
-                                                className="border-bottom border-0 rounded-3"
+                                                className="border rounded-3"
                                                 type="password"
                                                 placeholder="Password"
                                             />
@@ -173,7 +173,7 @@ const SignUp = () => {
                                         <div className="py-3 row justify-content-between align-items-center">
                                             <div className="col-lg-5">
                                                 <button
-                                                    className="rounded-3 px-4 py-2 btn btn-outline-success"
+                                                    className="rounded-3 px-4 py-2 btn btn-outline-primary bg-gradient"
                                                     type="submit"
                                                 >
                                                     Registration
@@ -183,7 +183,7 @@ const SignUp = () => {
                                                 <p className="mt-3">
                                                     Already have an account?{" "}
                                                     <Link
-                                                        className="text-success"
+                                                        className="text-primary"
                                                         to={"/"}
                                                     >
                                                         Log In
